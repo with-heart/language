@@ -4,8 +4,7 @@
   "description": "Created while following the tutorial at http://lisperator.net/pltut/dream.",
   "main": "lambda.js",
   "scripts": {
-    "test": "NODE_PATH=./ mocha --compilers js:babel-core/register --require babel-polyfill --recursive",
-    "test:watch": "npm run test -- --watch"
+    "test": "NODE_PATH=./src ava"
   },
   "repository": {
     "type": "git",
@@ -18,12 +17,11 @@
   },
   "homepage": "https://github.com/lionize/language#readme",
   "devDependencies": {
+    "ava": "^0.17.0",
     "babel-core": "^6.22.1",
     "babel-polyfill": "^6.22.0",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
-    "babel-register": "^6.22.0",
-    "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "babel-register": "^6.22.0"
   }
 }
