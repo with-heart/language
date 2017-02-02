@@ -4,7 +4,8 @@
   "description": "Created while following the tutorial at http://lisperator.net/pltut/dream.",
   "main": "lambda.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_PATH=./ mocha --compilers js:babel-core/register --require babel-polyfill --recursive",
+    "test:watch": "npm run test -- --watch"
   },
   "repository": {
     "type": "git",
