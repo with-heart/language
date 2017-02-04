@@ -110,9 +110,43 @@ function parse(input) {
   function parse_lambda() {
     return {
       type: "lambda",
+      name: input.peek().type == "var" ? input.next().value : null,
       vars: delimited("(", ")", ",", parse_varname),
       body: parse_expression(),
     }
+  }
+
+  function parse_let() {
+    skip_kw("let")
+    if (input.peek().type == "var") {
+      const name = input.next().value
+      const defs = delimited("(", ")", ",", parse_vardef)
+      return {
+        type: "call",
+        func: {
+          type: "lambda",
+          name,
+          vars: defs.map(def => def.name),
+          body: parse_expression(),
+        },
+        args: defs.map(def => def.def || FALSE),
+      }
+    }
+    return {
+      type: "let",
+      vars: delimited("(", ")", ",", parse_vardef),
+      body: parse_expression(),
+    }
+  }
+
+  function parse_vardef() {
+    const name = parse_varname()
+    let def
+    if (is_op("=")) {
+      input.next()
+      def = parse_expression()
+    }
+    return { name, def }
   }
 
   function parse_bool() {
@@ -136,6 +170,7 @@ function parse(input) {
         return exp
       }
       if (is_punc("{")) return parse_prog()
+      if (is_kw("let")) return parse_let()
       if (is_kw("if")) return parse_if()
       if (is_kw("true") || is_kw("false")) return parse_bool()
       if (is_kw("lambda") || is_kw("λ")) {

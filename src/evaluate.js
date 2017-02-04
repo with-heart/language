@@ -18,6 +18,13 @@ function evaluate(exp, env) {
       )
     case "lambda":
       return make_lambda(env, exp)
+    case "let":
+      exp.vars.forEach(v => {
+        const scope = env.extend()
+        scope.def(v.name, v.def ? evaluate(v.def, env) : false)
+        env = scope
+      })
+      return evaluate(exp.body, env)
     case "if":
       const cond = evaluate(exp.cond, env)
       if (cond !== false) return evaluate(exp.then, env)
@@ -65,6 +72,10 @@ function evaluate(exp, env) {
   }
 
   function make_lambda(env, exp) {
+    if (exp.name) {
+      env = env.extend()
+      env.def(exp.name, lambda)
+    }
     function lambda() {
       const names = exp.vars
       const scope = env.extend()

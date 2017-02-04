@@ -1,6 +1,6 @@
 function TokenStream(input) {
   let current = null
-  const keywords = " if then else lambda λ true false "
+  const keywords = " let if then else lambda λ true false "
 
   return {
     next,
